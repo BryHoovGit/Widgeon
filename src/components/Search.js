@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
 const Search = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-
+    const [searchTerm, setSearchTerm] = useState('programming');
+    const [results, setResults] = useState([]);
 
     useEffect(() => {
         const search = async () => {
-            await axios.get('https://en.wikipedia.org/w/api.php', {
+            const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
                 params: {
                     action: 'query',
                     list: 'search',
@@ -16,10 +16,40 @@ const Search = () => {
                     srsearch: searchTerm
                 }
             });
+            setResults(data.query.search);
         };
 
-        search();
+        const timeoutId = setTimeout(() => {
+            if(searchTerm){
+                search();
+            }
+        }, 500);
+
+        return () => {
+            console.log('cleanup')
+        }
     }, [searchTerm]);
+
+    const renderedResults = results.map((result) => {
+        return (
+            <div key={result.pageid} className="item">
+                <div className="right floated content">
+                    <a 
+                    className="ui button" 
+                    href={`https://en.wikipedia.org?curid=${result.pageid}`}
+                    >Go
+                    </a>
+                </div>
+                <div className="content">
+                    <div className="header">
+                        {result.title}
+                    </div>
+                    <span dangerouslySetInnerHTML={{ __html: result.snippet }}>
+                    </span>
+                </div>
+            </div>
+        )
+    })
 
     return (
         <div>
@@ -28,6 +58,9 @@ const Search = () => {
                     <label htmlFor="searchBar">Enter search term: </label>
                     <input id="searchBar" onChange={e => setSearchTerm(e.target.value)} value={searchTerm} className="input"></input>
                 </div>
+            </div>
+            <div className="ui celled list">
+                {renderedResults}
             </div>
         </div>
     )
