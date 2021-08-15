@@ -19,14 +19,18 @@ const Search = () => {
             setResults(data.query.search);
         };
 
-        const timeoutId = setTimeout(() => {
-            if(searchTerm){
-                search();
+        if(searchTerm && !results.length)  {
+            search();
+        } else {
+            const timeoutId = setTimeout(() => {
+                if(searchTerm){
+                    search();
+                }
+            }, 500);
+    
+            return () => {
+                clearTimeout(timeoutId);
             }
-        }, 500);
-
-        return () => {
-            console.log('cleanup')
         }
     }, [searchTerm]);
 
