@@ -1,7 +1,7 @@
 import React from "react";
 
 const Drowpdown = () => {
-  return <div>Dropdown</div>;
+  return <h1>Dropdown</h1>;
 };
 
 export default Drowpdown;
