@@ -51,6 +51,9 @@ const Drowpdown = ({ options, selected, onSelectedChange }) => {
           </div>
         </div>
       </div>
+      <h2
+        style={{ color: selected.value }}
+      >{`This text is ${selected.value}`}</h2>
     </div>
   );
 };
